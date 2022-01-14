@@ -1,0 +1,120 @@
+﻿@model EcommerceWebside.ViewModel.itemViewModel
+
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function () {
+          
+            SaveItem();
+            reset();
+        });
+    });
+
+
+
+
+
+    function reset() {
+        $('#categoryId').val('');
+        $('#itemCode').val('');
+        $('#itemName').val('');
+        $('#Description').val('');
+        $('#itemPrice').val('');
+        $('#imagePath').val('');
+
+
+    }
+
+    function SaveItem() {
+      
+        var formData = new FormData();
+        formData.append("categoryId", $('#categoryId').val());
+        formData.append("itemCode", $('#itemCode').val());
+        formData.append("itemName", $('#itemName').val());
+        formData.append("Description", $('#Description').val());
+        formData.append("itemPrice", $('#itemPrice').val());
+        formData.append("imagePath", $('#imagePath').get(0).files[0]);
+    
+
+        $.ajax({
+            
+            async: true,
+            dataType: 'JSON',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            url: '/Item/Index',
+            data: formData,
+            success: function (data) {
+
+                if (data.success)
+                {
+                    alert(data.Message)
+                }
+                
+            },
+            error: function (err) {
+                alert(err)
+            }
+        });
+
+        
+    }
+</script>
+
+
+
+
+
+
+<div class="container">
+    <div class="col-md-4">
+        <div class="form-group">
+            Category:
+            @Html.DropDownListFor(model => model.categoryId, new SelectList(Model.CategorySelectListItem, "Value", "Text"),
+           new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            Item Code:
+            @Html.TextBoxFor(model => model.itemCode, new { @class = "form-control",   autocomplete="off"})
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            Item Name:
+            @Html.TextBoxFor(model => model.itemName, new { @class = "form-control", autocomplete = "off" })
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            Description:
+            @Html.TextBoxFor(model => model.Description, new { @class = "form-control", autocomplete = "off" })
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            Item Price:
+            @Html.TextBoxFor(model => model.itemPrice, new { @class = "form-control", autocomplete = "off" })
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            Image
+            @Html.TextBoxFor(model => model.imagePath, new { type="file" , @class = "form-control", autocomplete = "off" })
+        </div>
+    </div>
+
+
+    <div>
+        <input type="button"  id="btnSave" value="Save" name="save" class="btn btn-primary" />
+        &nbsp;
+        <input type="button" value="Reset" name="reset" class="btn btn-danger" />
+    </div>
+</div>
